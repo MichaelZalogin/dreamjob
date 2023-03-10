@@ -1,7 +1,6 @@
 package ru.mch.dreamjob.entity;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Vacancy {
@@ -13,9 +12,6 @@ public class Vacancy {
     private String description;
 
     private LocalDateTime creationDate = LocalDateTime.now();
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter
-            .ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
 
     public Vacancy(int id, String title, String description) {
         this.id = id;
