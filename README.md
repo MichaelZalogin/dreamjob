@@ -22,7 +22,7 @@ CRUD-MVC приложение на сервлетах и JSP, реализующее биржу
 * Две модели хранения данных MemStore PsqlStore
 
 ## Технологии
-* Java14
+* Java 18
 * JDBC
 * PostgreSQL
 * Servlet&JSP&JSTL
