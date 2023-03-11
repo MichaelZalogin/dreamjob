@@ -32,6 +32,7 @@ CRUD-MVC приложение на сервлетах и JSP, реализующее биржу
 * Log4j
 * Apache Commons Fileupload
 
+## Интерфейс
 
 * Добавление кандидата
   ![ScreenShot](screenshots/addCandidate.PNG)
