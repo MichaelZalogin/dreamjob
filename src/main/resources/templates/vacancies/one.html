@@ -20,7 +20,7 @@
 <div class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">DreamJob</a>
+            <a class="navbar-brand" href="/">★DreamJob★</a>
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="/">Главная</a>
@@ -41,6 +41,12 @@
                        placeholder="Предлагая должность, например, Ведущий Java разработчик">
             </div>
             <div class="mb-3">
+                <label for="city"><b>Город</b></label>
+                <select class="form-control" id="city" name="cityId">
+                    <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}" th:field="*{cityId}" th:selected="${city.id==cityId}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="description" class="form-label"><b>Описание</b></label>
                 <textarea class="form-control" id="description" name="description" th:field="*{description}" rows="25"
                           placeholder="Опишите требования к кандидату"></textarea>
@@ -48,12 +54,6 @@
             <div class="form-check mb-3">
                 <input type="checkbox" name="visible" class="form-check-input" id="visible" th:field="*{visible}">
                 <label class="form-check-label" for="visible">Опубликовать</label>
-            </div>
-            <div class="mb-3">
-                <label for="city"><b>Город</b></label>
-                <select class="form-control" id="city" name="cityId">
-                    <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}" th:field="*{cityId}" th:selected="${city.id==cityId}"></option>
-                </select>
             </div>
             <div class="mb-3 row">
                 <div class="col-6"></div>

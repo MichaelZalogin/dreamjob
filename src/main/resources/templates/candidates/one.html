@@ -20,7 +20,7 @@
 <div class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">DreamJob</a>
+            <a class="navbar-brand" href="/">★DreamJob★</a>
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="/">Главная</a>
@@ -39,6 +39,12 @@
                 <label for="title" class="form-label"><b>Название</b></label>
                 <input type="text" class="form-control" id="title" name="name" th:field="*{name}"
                        placeholder="Введите Ваше имя">
+            </div>
+            <div class="mb-3">
+                <label for="city"><b>Город</b></label>
+                <select class="form-control" id="city" name="cityId">
+                    <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}" th:field="*{cityId}" th:selected="${city.id==cityId}"></option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label"><b>Описание</b></label>

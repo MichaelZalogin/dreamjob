@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mch.dreamjob.entity.Candidate;
+import ru.mch.dreamjob.repository.MemoryCandidateRepository;
+import ru.mch.dreamjob.repository.MemoryCityRepository;
 import ru.mch.dreamjob.service.SimpleCandidateService;
 
 @Controller
@@ -11,9 +13,11 @@ import ru.mch.dreamjob.service.SimpleCandidateService;
 public class CandidateController {
 
     private final SimpleCandidateService candidateService;
+    private final MemoryCityRepository cityService;
 
-    public CandidateController(SimpleCandidateService candidateService) {
+    public CandidateController(SimpleCandidateService candidateService, MemoryCityRepository cityService) {
         this.candidateService = candidateService;
+        this.cityService = cityService;
     }
 
     @GetMapping
@@ -23,7 +27,8 @@ public class CandidateController {
     }
 
     @GetMapping("/create")
-    public String getCreationPage() {
+    public String getCreationPage(Model model) {
+        model.addAttribute("cities", cityService.findAll());
         return "candidates/create";
     }
 
@@ -40,6 +45,7 @@ public class CandidateController {
             model.addAttribute("message", "Резюме с указанным идентификатором не найдено");
             return "errors/404";
         }
+        model.addAttribute("cities", cityService.findAll());
         model.addAttribute("candidate", candidateOptional.get());
         return "candidates/one";
     }
