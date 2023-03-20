@@ -40,6 +40,10 @@
                 <input type="text" class="form-control" id="title" name="name" placeholder="Введите Ваше имя">
             </div>
             <div class="mb-3">
+                <label for="formFile"><b>Фото</b></label>
+                <input class="form-control form-control-sm w-100" type="file" id="formFile" name="file" required>
+            </div>
+            <div class="mb-3">
                 <label for="city"><b>Город</b></label>
                 <select class="form-control" id="city" name="cityId">
                     <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>

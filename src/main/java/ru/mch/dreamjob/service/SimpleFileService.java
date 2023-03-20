@@ -19,6 +19,7 @@ public class SimpleFileService implements FileService {
 
     private final String storageDirectory;
 
+    /** Создается директория по указанному в yml пути */
     public SimpleFileService(FileRepository fileRepository,
                              @Value("${file.directory}") String storageDirectory) {
         this.fileRepository = fileRepository;
@@ -34,6 +35,11 @@ public class SimpleFileService implements FileService {
         }
     }
 
+    /** @param fileDto Получаем c view
+     *  Генерируем уникальное имя файла storageDirectory+sep+uuid+nameDTO
+     *  записываем содержимое DTO в файл с именем
+     *  сохраняем в бд доменную модель File
+     *  */
     @Override
     public File save(FileDto fileDto) {
         var path = getNewFilePath(fileDto.getName());
@@ -88,5 +94,4 @@ public class SimpleFileService implements FileService {
             throw new RuntimeException(e);
         }
     }
-
 }

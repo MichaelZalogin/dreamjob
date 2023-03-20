@@ -3,8 +3,9 @@ package ru.mch.dreamjob.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.mch.dreamjob.dto.FileDto;
 import ru.mch.dreamjob.entity.Candidate;
-import ru.mch.dreamjob.repository.MemoryCandidateRepository;
 import ru.mch.dreamjob.repository.MemoryCityRepository;
 import ru.mch.dreamjob.service.SimpleCandidateService;
 
@@ -33,9 +34,14 @@ public class CandidateController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Candidate candidate) {
-        candidateService.save(candidate);
-        return "redirect:/candidates";
+    public String create(@ModelAttribute Candidate candidate, @RequestParam MultipartFile file, Model model) {
+        try {
+            candidateService.save(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
+            return "redirect:/vacancies";
+        } catch (Exception exception) {
+            model.addAttribute("message", exception.getMessage());
+            return "errors/404";
+        }
     }
 
     @GetMapping("/{id}")
@@ -51,13 +57,18 @@ public class CandidateController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Candidate candidate, Model model) {
-        var isUpdated = candidateService.update(candidate);
-        if (!isUpdated) {
-            model.addAttribute("message", "Резюме с указанным идентификатором не найдено");
+    public String update(@ModelAttribute Candidate candidate, @RequestParam MultipartFile file, Model model) {
+        try {
+            var isUpdated = candidateService.update(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
+            if (!isUpdated) {
+                model.addAttribute("message", "Кандидат по Вашему запросы не был найден");
+                return "errors/404";
+            }
+            return "redirect:/vacancies";
+        } catch (Exception exception) {
+            model.addAttribute("message", exception.getMessage());
             return "errors/404";
         }
-        return "redirect:/candidates";
     }
 
     @GetMapping("/delete/{id}")
