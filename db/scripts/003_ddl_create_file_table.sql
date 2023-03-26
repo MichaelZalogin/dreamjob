@@ -1,4 +1,4 @@
-CREATE TABLE files
+CREATE TABLE file
 (
     id   serial PRIMARY KEY,
     name varchar NOT NULL,

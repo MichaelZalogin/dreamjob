@@ -1,7 +1,8 @@
-package ru.mch.dreamjob.repository;
+package ru.mch.dreamjob.repository.memory;
 
 import org.springframework.stereotype.Repository;
 import ru.mch.dreamjob.entity.Candidate;
+import ru.mch.dreamjob.repository.CandidateRepository;
 
 import java.util.Collection;
 import java.util.HashMap;

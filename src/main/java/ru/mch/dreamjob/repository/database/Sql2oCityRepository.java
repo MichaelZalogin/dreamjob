@@ -1,8 +1,9 @@
-package ru.mch.dreamjob.repository;
+package ru.mch.dreamjob.repository.database;
 
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import ru.mch.dreamjob.entity.City;
+import ru.mch.dreamjob.repository.CityRepository;
 
 import java.util.Collection;
 
@@ -18,7 +19,7 @@ public class Sql2oCityRepository implements CityRepository {
     @Override
     public Collection<City> findAll() {
         try (var connection = sql2o.open()) {
-            var query = connection.createQuery("SELECT id,name FROM cities");
+            var query = connection.createQuery("SELECT id,name FROM city");
             return query.executeAndFetch(City.class);
         }
     }

@@ -1,7 +1,8 @@
-package ru.mch.dreamjob.repository;
+package ru.mch.dreamjob.repository.memory;
 
 import org.springframework.stereotype.Repository;
 import ru.mch.dreamjob.entity.File;
+import ru.mch.dreamjob.repository.FileRepository;
 
 import java.util.Map;
 import java.util.Optional;

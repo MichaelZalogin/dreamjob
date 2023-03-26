@@ -1,8 +1,9 @@
-package ru.mch.dreamjob.repository;
+package ru.mch.dreamjob.repository.database;
 
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import ru.mch.dreamjob.entity.File;
+import ru.mch.dreamjob.repository.FileRepository;
 
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class Sql2oFileRepository implements FileRepository {
     @Override
     public File save(File file) {
         try (var connection = sql2o.open()) {
-            var query = connection.createQuery("INSERT INTO files (name, path) VALUES (:name, :path)", true)
+            var query = connection.createQuery("INSERT INTO file (name, path) VALUES (:name, :path)", true)
                     .addParameter("name", file.getName())
                     .addParameter("path", file.getPath());
             int generatedId = query.executeUpdate().getKey(Integer.class);
@@ -30,7 +31,7 @@ public class Sql2oFileRepository implements FileRepository {
     @Override
     public Optional<File> findById(int id) {
         try (var connection = sql2o.open()) {
-            var query = connection.createQuery("SELECT * FROM files WHERE id = :id");
+            var query = connection.createQuery("SELECT * FROM file WHERE id = :id");
             var file = query.addParameter("id", id).executeAndFetchFirst(File.class);
             return Optional.ofNullable(file);
         }

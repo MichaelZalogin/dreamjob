@@ -1,6 +1,6 @@
-INSERT INTO cities(name)
+INSERT INTO city(name)
 VALUES ('Москва');
-INSERT INTO cities(name)
+INSERT INTO city(name)
 VALUES ('Санкт-Петербург');
-INSERT INTO cities(name)
+INSERT INTO city(name)
 VALUES ('Екатеринбург');
