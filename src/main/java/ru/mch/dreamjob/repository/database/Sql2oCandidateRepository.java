@@ -53,7 +53,7 @@ public class Sql2oCandidateRepository implements CandidateRepository {
             var query = connection.createQuery("""
                     UPDATE candidate
                     SET name = :name, description = :description,
-                     creation_date = :creation_date, city_id = :city_id, file_id = :city_id
+                     creation_date = :creation_date, city_id = :city_id, file_id = :file_id
                     WHERE id = :id
                     """);
             query.addParameter("name", candidate.getName());
