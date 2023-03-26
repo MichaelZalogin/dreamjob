@@ -6,17 +6,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.mch.dreamjob.dto.FileDto;
 import ru.mch.dreamjob.entity.Candidate;
-import ru.mch.dreamjob.repository.MemoryCityRepository;
-import ru.mch.dreamjob.service.SimpleCandidateService;
+import ru.mch.dreamjob.service.CandidateService;
+import ru.mch.dreamjob.service.CityService;
 
 @Controller
 @RequestMapping("/candidates")
 public class CandidateController {
 
-    private final SimpleCandidateService candidateService;
-    private final MemoryCityRepository cityService;
+    private final CandidateService candidateService;
 
-    public CandidateController(SimpleCandidateService candidateService, MemoryCityRepository cityService) {
+    private final CityService cityService;
+
+    public CandidateController(CandidateService candidateService, CityService cityService) {
         this.candidateService = candidateService;
         this.cityService = cityService;
     }
