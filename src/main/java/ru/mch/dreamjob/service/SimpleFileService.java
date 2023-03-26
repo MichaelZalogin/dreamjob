@@ -19,7 +19,9 @@ public class SimpleFileService implements FileService {
 
     private final String storageDirectory;
 
-    /** Создается директория по указанному в yml пути */
+    /**
+     * Создается директория по указанному в property пути
+     */
     public SimpleFileService(FileRepository sql2oFileRepository,
                              @Value("${file.directory}") String storageDirectory) {
         this.fileRepository = sql2oFileRepository;
