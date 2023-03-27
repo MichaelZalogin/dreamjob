@@ -1,11 +1,36 @@
 package ru.mch.dreamjob.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import ru.mch.dreamjob.entity.User;
+import ru.mch.dreamjob.service.UserService;
+
+@Controller
+@RequestMapping("/users")
 public class UserController {
 
-    //6. Создать контроллер ru.job4j.dreamjob.controller.UserController. У него должен быть
-    // @RequestMapping("/users").
-    // Контроллер должен содержать два метода с путем
-    // /register: GET getRegistationPage() и POST register();
+    private final UserService userService;
 
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
+    @GetMapping("/register")
+    public String getRegistationPage() {
+        return "users/register";
+    }
+
+    @PostMapping("/register")
+    public String register(Model model, @ModelAttribute User user) {
+        var savedUser = userService.save(user);
+        if (savedUser.isEmpty()) {
+            model.addAttribute("message", "Пользователь с такой почтой уже существует");
+            return "errors/404";
+        }
+        return "redirect:/vacancies";
+    }
 }
