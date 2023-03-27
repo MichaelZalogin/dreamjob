@@ -1,5 +1,7 @@
 package ru.mch.dreamjob.repository.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import ru.mch.dreamjob.entity.User;
@@ -11,6 +13,8 @@ import java.util.Optional;
 public class Sql2oUserRepository implements UserRepository {
 
     private final Sql2o sql2o;
+
+    private static final Logger LOG = LoggerFactory.getLogger(Sql2oUserRepository.class.getName());
 
     public Sql2oUserRepository(Sql2o sql2o) {
         this.sql2o = sql2o;
@@ -29,7 +33,10 @@ public class Sql2oUserRepository implements UserRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             user.setId(generatedId);
             return Optional.ofNullable(user);
+        } catch (Exception e) {
+            LOG.error("Пользователь с этой электронной почтой уже существует", e);
         }
+        return Optional.empty();
     }
 
     @Override
