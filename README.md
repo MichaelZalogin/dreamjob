@@ -1,4 +1,4 @@
-# Проект "Dream Job"
+# Проект "Dream Job" (В процессе разработки)
 
 * [Описание](#описание)
 * [Функционал](#функционал)
@@ -7,53 +7,58 @@
 * [Автор](#автор)
 
 ## Описание
-CRUD-MVC приложение на сервлетах и JSP, реализующее биржу
+
+MVC приложение на Spring Boot и Thymeleaf, реализующее биржу
 вакансий и кандидатов.
-Можно добавлять/изменять данные по каждой вакансии и кандидату.
-По кандидатам также поддерживается хранение фотографий профиля.
 
 ## Функционал
-* Регистрация пользователя
-* Аутентификация на сервлет-фильтрах
-* Авторизация через БД PostgreSQL
-* Добавление/изменение вакансий
-* Добавление/изменение соискателей
-* Добавление/изменение/скачивание фотографии соискателя
-* Две модели хранения данных MemStore PsqlStore
+
+* Регистрация пользователя;
+* Аутентификация;
+* Авторизация через БД PostgreSQL;
+* Добавление/изменение/удаление вакансий;
+* Добавление/изменение/удаление соискателей;
+* Возможность работы с фотографиями профилей;
+* Две модели хранения данных:
+  - Хранение в оперативной памяти (реализация репозитория Memory#Repository);
+  - Хранение в базе данных PostgreSQL (реализация репозитория Sql2o#Repository).
 
 ## Технологии
-* Java 18
-* JDBC
-* PostgreSQL
-* Servlet&JSP&JSTL
-* HTML, CSS, BOOTSTRAP, JS, AJAX, JQUERY
-* Apache Tomcat Server
-* Junit, Mockito, Powermock
-* Log4j
-* Apache Commons Fileupload
+
+* Java 18;
+* Spring boot;
+* PostgreSQL;
+* Sql2o (ORM) + commons-dbcp2(connection pool);
+* Apache Tomcat Server;
+* Thymeleaf;
+* HTML, CSS, Bootstrap;
+* Log4j;
+* Тесты: Junit5, Mockito. Работают c H2 db;
+* Maven. Поддержка профилей test/prod;
+* Liquibase.
 
 ## Интерфейс
 
 * Добавление кандидата
-  ![ScreenShot](screenshots/addCandidate.PNG)
+  ![Screenshot](screenshots/addCandidate.png)
 
 * Добавление вакансии
-  ![ScreenShot](screenshots/addPost.PNG)
+  ![Screenshot](screenshots/addVacancy.png)
 
-* Список кандидатов
-  ![ScreenShot](screenshots/candidates.PNG)
+* Редактирование вакансии
+  ![Screenshot](screenshots/editVacancy.png)
 
 * Список вакансий
-  ![ScreenShot](screenshots/posts.PNG)
-
-* Авторизация
-  ![ScreenShot](screenshots/login.PNG)
+  ![Screenshot](screenshots/foreachVacancy.png)
 
 * Регистрация
-  ![ScreenShot](screenshots/registration.PNG)
+  ![Screenshot](screenshots/regUser.png)
+
+* Авторизация
+  ![Screenshot](screenshots/auth.png)
 
 * Проверка подлиности пароля
-  ![ScreenShot](images/wrongPass.PNG)
+  ![Screenshot](screenshots/errorAuth.png)
 
 ## Автор
 
