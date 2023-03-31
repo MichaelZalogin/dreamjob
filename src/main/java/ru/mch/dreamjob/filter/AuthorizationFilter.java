@@ -15,7 +15,8 @@ import java.io.IOException;
 public class AuthorizationFilter extends HttpFilter {
 
     @Override
-    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilter(HttpServletRequest request,
+                            HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         var uri = request.getRequestURI();
         if (isAlwaysPermitted(uri)) {
             chain.doFilter(request, response);
@@ -31,7 +32,7 @@ public class AuthorizationFilter extends HttpFilter {
     }
 
     private boolean isAlwaysPermitted(String uri) {
-        return uri.startsWith("/users/register") || uri.startsWith("/users/login");
+        return uri.startsWith("/users/register") || uri.startsWith("/users/login")
+               || uri.endsWith("/vacancies") || (uri.startsWith("/") && uri.endsWith("/"));
     }
-
 }
