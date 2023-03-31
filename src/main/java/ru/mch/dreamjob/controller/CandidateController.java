@@ -62,7 +62,7 @@ public class CandidateController {
         try {
             var isUpdated = candidateService.update(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
             if (!isUpdated) {
-                model.addAttribute("message", "Кандидат по Вашему запросы не был найден");
+                model.addAttribute("message", "Кандидат по Вашему запросу не был найден");
                 return "errors/404";
             }
             return "redirect:/vacancies";
