@@ -4,6 +4,10 @@
 # Log file
 *.log
 
+# Temp DB for test
+testdb.mv.db
+testdb.trace.db
+
 # BlueJ files
 *.ctxt
 
@@ -27,3 +31,4 @@ hs_err_pid*
 
 target
 out
+/files/

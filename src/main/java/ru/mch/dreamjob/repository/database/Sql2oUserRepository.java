@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import ru.mch.dreamjob.entity.User;
 import ru.mch.dreamjob.repository.UserRepository;
-
 import java.util.Optional;
 
 @Repository
