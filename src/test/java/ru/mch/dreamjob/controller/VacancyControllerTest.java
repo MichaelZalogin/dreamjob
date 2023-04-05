@@ -13,6 +13,7 @@ import ru.mch.dreamjob.service.CityService;
 import ru.mch.dreamjob.service.VacancyService;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -40,11 +41,11 @@ public class VacancyControllerTest {
     public void whenRequestVacancyListPageThenGetPageWithVacancies() {
         var vacancy1 = new Vacancy(1, "test1", "desc1", now(), true, 1, 2);
         var vacancy2 = new Vacancy(2, "test2", "desc2", now(), false, 3, 4);
-        var expectedVacancies = List.of(vacancy1, vacancy2);
+        List<Vacancy> expectedVacancies = List.of(vacancy1, vacancy2);
         when(vacancyService.findAll()).thenReturn(expectedVacancies);
 
-        var model = new ConcurrentModel();
-        var view = vacancyController.getAll(model);
+        ConcurrentModel model = new ConcurrentModel();
+        String view = vacancyController.getAll(model);
         var actualVacancies = model.getAttribute("vacancies");
 
         assertThat(view).isEqualTo("vacancies/list");
@@ -96,5 +97,31 @@ public class VacancyControllerTest {
 
         assertThat(view).isEqualTo("errors/404");
         assertThat(actualExceptionMessage).isEqualTo(expectedException.getMessage());
+    }
+
+    @Test
+    public void whenRequestGetVacancyByIdThenReturnPageWithOneVacancy() {
+        var vacancy = Optional.of(new Vacancy(1, "test1", "desc1", now(), true, 1, 2));
+        when(vacancyService.findById(1)).thenReturn(vacancy);
+
+        ConcurrentModel model = new ConcurrentModel();
+        String view = vacancyController.getById(model, 1);
+        var actualVacancies1 = model.getAttribute("vacancy");
+
+        assertThat(actualVacancies1).isEqualTo(vacancy.get());
+        assertThat(view).isEqualTo("vacancies/one");
+    }
+
+    @Test
+    public void whenRequestGetVacancyByIdThenGetErrorPageWithMessage() {
+        var expectedException = "Вакансия с указанным идентификатором не найдена";
+        when(vacancyService.findById(1)).thenReturn(Optional.empty());
+
+        ConcurrentModel model = new ConcurrentModel();
+        String view = vacancyController.getById(model, 1);
+        var actualExceptionMessage = model.getAttribute("message");
+
+        assertThat(view).isEqualTo("errors/404");
+        assertThat(actualExceptionMessage).isEqualTo(expectedException);
     }
 }
