@@ -43,11 +43,9 @@ public class VacancyControllerTest {
         var vacancy2 = new Vacancy(2, "test2", "desc2", now(), false, 3, 4);
         List<Vacancy> expectedVacancies = List.of(vacancy1, vacancy2);
         when(vacancyService.findAll()).thenReturn(expectedVacancies);
-
         ConcurrentModel model = new ConcurrentModel();
         String view = vacancyController.getAll(model);
         var actualVacancies = model.getAttribute("vacancies");
-
         assertThat(view).isEqualTo("vacancies/list");
         assertThat(actualVacancies).isEqualTo(expectedVacancies);
     }
@@ -58,11 +56,9 @@ public class VacancyControllerTest {
         var city2 = new City(2, "Санкт-Петербург");
         var expectedCities = List.of(city1, city2);
         when(cityService.findAll()).thenReturn(expectedCities);
-
         var model = new ConcurrentModel();
         var view = vacancyController.getCreationPage(model);
         var actualVacancies = model.getAttribute("cities");
-
         assertThat(view).isEqualTo("vacancies/create");
         assertThat(actualVacancies).isEqualTo(expectedCities);
     }
@@ -83,18 +79,15 @@ public class VacancyControllerTest {
         assertThat(view).isEqualTo("redirect:/vacancies");
         assertThat(actualVacancy).isEqualTo(vacancy);
         assertThat(fileDto).usingRecursiveComparison().isEqualTo(actualFileDto);
-
     }
 
     @Test
     public void whenSomeExceptionThrownThenGetErrorPageWithMessage() {
         var expectedException = new RuntimeException("Failed to write file");
         when(vacancyService.save(any(), any())).thenThrow(expectedException);
-
         var model = new ConcurrentModel();
         var view = vacancyController.create(new Vacancy(), testFile, model);
         var actualExceptionMessage = model.getAttribute("message");
-
         assertThat(view).isEqualTo("errors/404");
         assertThat(actualExceptionMessage).isEqualTo(expectedException.getMessage());
     }
@@ -102,13 +95,16 @@ public class VacancyControllerTest {
     @Test
     public void whenRequestGetVacancyByIdThenReturnPageWithOneVacancy() {
         var vacancy = Optional.of(new Vacancy(1, "test1", "desc1", now(), true, 1, 2));
+        var city1 = new City(1, "Москва");
+        var expectedCities = List.of(city1);
+        when(cityService.findAll()).thenReturn(expectedCities);
         when(vacancyService.findById(1)).thenReturn(vacancy);
-
         ConcurrentModel model = new ConcurrentModel();
         String view = vacancyController.getById(model, 1);
         var actualVacancies1 = model.getAttribute("vacancy");
-
+        var actualCity = model.getAttribute("cities");
         assertThat(actualVacancies1).isEqualTo(vacancy.get());
+        assertThat(actualCity).isEqualTo(expectedCities);
         assertThat(view).isEqualTo("vacancies/one");
     }
 
@@ -116,12 +112,34 @@ public class VacancyControllerTest {
     public void whenRequestGetVacancyByIdThenGetErrorPageWithMessage() {
         var expectedException = "Вакансия с указанным идентификатором не найдена";
         when(vacancyService.findById(1)).thenReturn(Optional.empty());
-
         ConcurrentModel model = new ConcurrentModel();
         String view = vacancyController.getById(model, 1);
         var actualExceptionMessage = model.getAttribute("message");
-
         assertThat(view).isEqualTo("errors/404");
         assertThat(actualExceptionMessage).isEqualTo(expectedException);
+    }
+
+    @Test
+    public void whenRequestUpdateVacancyThenRedirectVacanciesPage() {
+        when(vacancyService.update(any(), any())).thenReturn(true);
+        var vacancy = mock(Vacancy.class);
+        var model = new ConcurrentModel();
+        var view = vacancyController.update(vacancy, testFile, model);
+        assertThat(view).isEqualTo("redirect:/vacancies");
+    }
+
+    @Test
+    public void whenRequestUpdateVacancyThenGetErrorPageWithMessage() {
+        var expectedException = new RuntimeException("Вакансия с указанным идентификатором не найдена");
+        when(vacancyService.update(any(), any())).thenThrow(expectedException);
+        var vacancy = mock(Vacancy.class);
+
+        var model = new ConcurrentModel();
+        var view = vacancyController.update(vacancy, testFile, model);
+
+        var actualExceptionMessage = model.getAttribute("message");
+
+        assertThat(view).isEqualTo("errors/404");
+        assertThat(actualExceptionMessage).isEqualTo(expectedException.getMessage());
     }
 }
