@@ -11,7 +11,6 @@ import ru.mch.dreamjob.entity.Candidate;
 import ru.mch.dreamjob.entity.City;
 import ru.mch.dreamjob.service.CandidateService;
 import ru.mch.dreamjob.service.CityService;
-
 import java.util.List;
 import java.util.Optional;
 import static java.time.LocalDateTime.now;
