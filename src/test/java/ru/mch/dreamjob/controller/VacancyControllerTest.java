@@ -11,10 +11,8 @@ import ru.mch.dreamjob.entity.City;
 import ru.mch.dreamjob.entity.Vacancy;
 import ru.mch.dreamjob.service.CityService;
 import ru.mch.dreamjob.service.VacancyService;
-
 import java.util.List;
 import java.util.Optional;
-
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -70,12 +68,10 @@ public class VacancyControllerTest {
         var vacancyArgumentCaptor = ArgumentCaptor.forClass(Vacancy.class);
         var fileDtoArgumentCaptor = ArgumentCaptor.forClass(FileDto.class);
         when(vacancyService.save(vacancyArgumentCaptor.capture(), fileDtoArgumentCaptor.capture())).thenReturn(vacancy);
-
         var model = new ConcurrentModel();
         var view = vacancyController.create(vacancy, testFile, model);
         var actualVacancy = vacancyArgumentCaptor.getValue();
         var actualFileDto = fileDtoArgumentCaptor.getValue();
-
         assertThat(view).isEqualTo("redirect:/vacancies");
         assertThat(actualVacancy).isEqualTo(vacancy);
         assertThat(fileDto).usingRecursiveComparison().isEqualTo(actualFileDto);
@@ -95,28 +91,28 @@ public class VacancyControllerTest {
     @Test
     public void whenRequestGetVacancyByIdThenReturnPageWithOneVacancy() {
         var vacancy = Optional.of(new Vacancy(1, "test1", "desc1", now(), true, 1, 2));
-        var city1 = new City(1, "Москва");
-        var expectedCities = List.of(city1);
+        var city = new City(1, "Москва");
+        var expectedCities = List.of(city);
         when(cityService.findAll()).thenReturn(expectedCities);
         when(vacancyService.findById(1)).thenReturn(vacancy);
         ConcurrentModel model = new ConcurrentModel();
         String view = vacancyController.getById(model, 1);
-        var actualVacancies1 = model.getAttribute("vacancy");
+        var actualVacancies = model.getAttribute("vacancy");
         var actualCity = model.getAttribute("cities");
-        assertThat(actualVacancies1).isEqualTo(vacancy.get());
+        assertThat(actualVacancies).isEqualTo(vacancy.get());
         assertThat(actualCity).isEqualTo(expectedCities);
         assertThat(view).isEqualTo("vacancies/one");
     }
 
     @Test
     public void whenRequestGetVacancyByIdThenGetErrorPageWithMessage() {
-        var expectedException = "Вакансия с указанным идентификатором не найдена";
+        var expected = "Вакансия с указанным идентификатором не найдена";
         when(vacancyService.findById(1)).thenReturn(Optional.empty());
         ConcurrentModel model = new ConcurrentModel();
         String view = vacancyController.getById(model, 1);
-        var actualExceptionMessage = model.getAttribute("message");
+        var actualMessage = model.getAttribute("message");
         assertThat(view).isEqualTo("errors/404");
-        assertThat(actualExceptionMessage).isEqualTo(expectedException);
+        assertThat(actualMessage).isEqualTo(expected);
     }
 
     @Test
@@ -129,17 +125,45 @@ public class VacancyControllerTest {
     }
 
     @Test
+    public void whenRequestUpdateVacancyThenReturnFalseAndRedirectErrorPage() {
+        var expected = "Вакансия с указанным идентификатором не найдена";
+        when(vacancyService.update(any(), any())).thenReturn(false);
+        var vacancy = mock(Vacancy.class);
+        var model = new ConcurrentModel();
+        var view = vacancyController.update(vacancy, testFile, model);
+        var actualMessage = model.getAttribute("message");
+        assertThat(view).isEqualTo("errors/404");
+        assertThat(actualMessage).isEqualTo(expected);
+    }
+
+    @Test
     public void whenRequestUpdateVacancyThenGetErrorPageWithMessage() {
         var expectedException = new RuntimeException("Вакансия с указанным идентификатором не найдена");
         when(vacancyService.update(any(), any())).thenThrow(expectedException);
         var vacancy = mock(Vacancy.class);
-
         var model = new ConcurrentModel();
         var view = vacancyController.update(vacancy, testFile, model);
-
         var actualExceptionMessage = model.getAttribute("message");
-
         assertThat(view).isEqualTo("errors/404");
         assertThat(actualExceptionMessage).isEqualTo(expectedException.getMessage());
+    }
+
+    @Test
+    public void whenRequestDeleteVacancyThenRedirectVacanciesPage() {
+        when(vacancyService.deleteById(1)).thenReturn(true);
+        var model = new ConcurrentModel();
+        var view = vacancyController.delete(model, 1);
+        assertThat(view).isEqualTo("redirect:/vacancies");
+    }
+
+    @Test
+    public void whenRequestDeleteVacancyThenGetErrorPageWithMessage() {
+        var expected = "Вакансия с указанным идентификатором не найдена";
+        when(vacancyService.deleteById(1)).thenReturn(false);
+        var model = new ConcurrentModel();
+        var view = vacancyController.delete(model, 1);
+        var actualMessage = model.getAttribute("message");
+        assertThat(actualMessage).isEqualTo(expected);
+        assertThat(view).isEqualTo("errors/404");
     }
 }
